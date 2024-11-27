@@ -5,6 +5,7 @@ from data import URBAN_ROUTES_URL
 # imports the URBAN_ROUTES_URL constant from data.py file, this will be updated when restarting server
 from helpers import is_url_reachable
 # imports server check from helpers.py file
+
 class TestUrbanRoutes:
     @classmethod
     def setup_class(cls):
@@ -13,6 +14,7 @@ class TestUrbanRoutes:
         else:
             print("Cannot connect to Urban Routes. Check the server is on and still running")
     # Tests server response using function from helpers.py file. New servers require data.py url to be updated
+
     def test_set_route(self):
         # Add in S8
         print('function created for set route')
