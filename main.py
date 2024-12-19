@@ -53,7 +53,8 @@ class TestUrbanRoutes:
         urban_routes_page = UrbanRoutesPage(self.driver)
         urban_routes_page.enter_locations(ADDRESS_FROM, ADDRESS_TO)
         urban_routes_page.call_taxi()
-        urban_routes_page.scroll_page(8)    # Scrolls so comment field is visible
+        urban_routes_page.select_plan()
+        urban_routes_page.scroll_page(8)    # Scrolls page to view field
         urban_routes_page.add_comment(MESSAGE_FOR_DRIVER)
         actual_value = urban_routes_page.verify_comment()
         assert actual_value == MESSAGE_FOR_DRIVER, f"Expected '{MESSAGE_FOR_DRIVER}', but got '{actual_value}'"

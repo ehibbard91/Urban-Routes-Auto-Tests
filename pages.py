@@ -4,7 +4,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 import helpers
 import time
-# I've added some waits and sleeps in order to visual see the process. Can be removed before submission if required
+
 # Defining the page class, locators and method in the class
 class UrbanRoutesPage:
     FROM_LOCATOR = (By.ID, 'from')
