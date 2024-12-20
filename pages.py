@@ -24,7 +24,7 @@ class UrbanRoutesPage:
     ENTER_CC_NUMBER = (By.ID, 'number')
     CVV_NUMBER_LOCATOR = (By.CSS_SELECTOR, 'input#code.card-input')
     LINK_CARD_LOCATOR = (By.XPATH, '//button[contains(text(), "Link")]')
-    PAYMENT_ICON_LOCATOR = (By.XPATH, '//img[contains(@src, "card")]')
+    PAYMENT_ICON_LOCATOR = (By.XPATH, '//img[contains(@alt, "card")]')
     COMMENT_LOCATOR = (By.XPATH, '//label[contains(text(), "Message")]')
     COMMENT_INPUT = (By.ID, 'comment')
     TOGGLE_LOCATOR = (By.CSS_SELECTOR, 'span.slider.round')
@@ -51,6 +51,15 @@ class UrbanRoutesPage:
         self.enter_from_location(from_text)
         self.enter_to_location(to_text)
 
+    def verify_locations(self, expected_from, expected_to):
+        # Verify the "From" field
+        from_field = self.driver.find_element(*self.FROM_LOCATOR)
+        actual_from = from_field.get_attribute('value')
+        # Verify the "To" field
+        to_field = self.driver.find_element(*self.TO_LOCATOR)
+        actual_to = to_field.get_attribute('value')
+        # Return both results as a tuple
+        return actual_from, actual_to
 
     def call_taxi(self):
         taxi_button = WebDriverWait(self.driver, 10).until(
@@ -67,6 +76,11 @@ class UrbanRoutesPage:
             pass
         else:
             self.driver.find_element(*self.PLAN_LOCATOR).click()
+
+    def is_plan_active(self):
+        # Verify if the 'supportive' plan is marked as active
+        active_plan_element = self.driver.find_element(*self.ACTIVE_PLAN_LOCATOR)
+        return "active" in active_plan_element.get_attribute("class")
 
     def enter_phone(self, phone_number):
         # Locates and clicks phone number
@@ -92,6 +106,7 @@ class UrbanRoutesPage:
     def fill_card(self, cc_number, cvv_number):
         # Fills the cc input fields
         self.driver.find_element(*self.PAYMENT_LOCATOR).click()     # Finds and clicks payment method
+        time.sleep(0.7)
         self.driver.find_element(*self.ADD_CARD_LOCATOR).click()    # Finds and clicks add card
         # Finds, clicks, and enters cc number
         cc_input = self.driver.find_element(*self.ENTER_CC_NUMBER)
@@ -109,7 +124,7 @@ class UrbanRoutesPage:
 
     def verify_payment(self):
         payment_icon = self.driver.find_element(*self.PAYMENT_ICON_LOCATOR)
-        return payment_icon.get_attribute('src') # Will be used to verify cash icon has changed to card
+        return payment_icon.get_attribute('alt') # Used to verify payment method is card
 
     def add_comment(self, comment):
         input_comment = self.driver.find_element(*self.COMMENT_LOCATOR)
@@ -122,7 +137,7 @@ class UrbanRoutesPage:
     def order_blanket_and_handkerchiefs(self):
         self.driver.find_element(*self.TOGGLE_LOCATOR).click()
 
-    def verify_order(self):
+    def get_blanket_and_handkerchiefs__checked(self):
         checkbox = self.driver.find_element(*self.CHECKBOX_LOCATOR)
         return checkbox.is_selected()  # This checks if the checkbox is selected
 
